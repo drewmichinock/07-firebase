@@ -12,8 +12,6 @@
 
   // variable created to reference database
   var db = firebase.database();
-
-  // initial values
   var # = #;
   var # = #;
   var # = #;
