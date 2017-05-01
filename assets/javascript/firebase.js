@@ -1,11 +1,11 @@
   // initialize firebase
   var config = {
-      apiKey: "AIzaSyCGjHHj54zXIlfU8dl6USJQPD45DWlQ2Yg",
-      authDomain: "train-time-30872.firebaseapp.com",
-      databaseURL: "https://train-time-30872.firebaseio.com",
-      projectId: "train-time-30872",
-      storageBucket: "train-time-30872.appspot.com",
-      messagingSenderId: "631340263673"
+      apiKey: "AIzaSyA_DQMAwlllyKJPONJo27_G7nrKrDw_nBk",
+      authDomain: "train-time-618a6.firebaseapp.com",
+      databaseURL: "https://train-time-618a6.firebaseio.com",
+      projectId: "train-time-618a6",
+      storageBucket: "train-time-618a6.appspot.com",
+      messagingSenderId: "939093204948"
   };
 
   firebase.initializeApp(config);
@@ -28,38 +28,44 @@
           // get inputs and store in variables
           var addName = $("#input-name").val().trim();
           var addDest = $("#input-dest").val().trim();
-          var addTime = new Date($("#input-time").val()).getTime();
+          var addTime = $("#input-time").val().trim();
           var addFreq = $("#input-freq").val().trim();
 
           // push inputs to firebase database
           database.ref("/trains").push({
 
               name: addName,
-              role: addRole,
-              start: addStart,
-              rate: addRate
+              destination: addDest,
+              time: addTime,
+              frequency: addFreq
 
           });
 
-      });
-
-      // show children of employees and key in console log
-      database.ref("/employees").on("child_added", function(snapshot) {
-
-          console.log(snapshot.val());
-
-          console.log(snapshot.getKey());
-
-          var tr = $("<tr>");
-
-          var nameTD = $("<td>");
-
-          nameTD.html(snapshot.val().name)
-
-          tr.append(nameTD);
-
-          // append to table body
+          // clear inputs after submission
+          $("#input-name").val("");
+          $("#input-dest").val("");
+          $("#input-time").val("");
+          $("#input-freq").val("");          
 
       });
 
-  })
+      // // show children of employees and key in console log
+      // database.ref().on("child_added", function(snapshot) {
+
+      //     console.log(snapshot.val());
+
+      //     console.log(snapshot.getKey());
+
+      //     var tr = $("<tr>");
+
+      //     var nameTD = $("<td>");
+
+      //     nameTD.html(snapshot.val().name)
+
+      //     tr.append(nameTD);
+
+      //     // append to table body
+
+  });
+
+  // });
