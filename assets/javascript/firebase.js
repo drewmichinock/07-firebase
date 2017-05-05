@@ -31,41 +31,67 @@
           var addTime = $("#input-time").val().trim();
           var addFreq = $("#input-freq").val().trim();
 
-          // push inputs to firebase database
-          database.ref("/trains").push({
+          // if any inputs are empty, do not submit
+          if (addName === "" ||
+              addDest === "" ||
+              addTime === "" ||
+              addFreq === "") {}
 
-              name: addName,
-              destination: addDest,
-              time: addTime,
-              frequency: addFreq
+          // if all inputs are entered, enable submit
+          else {
+
+              $("#submit").prop("disabled", false);
+
+              // push inputs to firebase database
+              database.ref("/trains").push({
+
+                  name: addName,
+                  destination: addDest,
+                  time: addTime,
+                  frequency: addFreq
+
+              });
+
+              // clear input fields after submission
+              $("#input-name").val("");
+              $("#input-dest").val("");
+              $("#input-time").val("");
+              $("#input-freq").val("")
+
+          }
+
+          // show trains and key in console log
+          database.ref("trains").on("child_added", function(train) {
+
+              console.log(train.val());
+
+              console.log(train.getKey());
+
+              var tableRow = $("<tr>");
+
+              var tableData = $("<td>");
+
+              var dataName = $(train.name);
+              var dataDest = $(train.dest);
+              var dataTime = $(train.time);
+              var dataFreq = $(train.freq);
+
+              dataName.text("<td>" + train.val().name + "</td>");
+              dataDest.html(train.val().dest);
+              dataTime.html(train.val().time);
+              dataFreq.html(train.val().freq);
+
+              // tableRow.append(tableData);
+
+              // append to table body
+              tableRow.append(dataName)
+
+              console.log();
+
+              $("#trains").append(tableRow)
 
           });
 
-          // clear inputs after submission
-          $("#input-name").val("");
-          $("#input-dest").val("");
-          $("#input-time").val("");
-          $("#input-freq").val("");          
-
       });
 
-      // // show children of employees and key in console log
-      // database.ref().on("child_added", function(snapshot) {
-
-      //     console.log(snapshot.val());
-
-      //     console.log(snapshot.getKey());
-
-      //     var tr = $("<tr>");
-
-      //     var nameTD = $("<td>");
-
-      //     nameTD.html(snapshot.val().name)
-
-      //     tr.append(nameTD);
-
-      //     // append to table body
-
   });
-
-  // });
