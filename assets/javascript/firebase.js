@@ -16,6 +16,8 @@
   // initiate jquery
   $(document).ready(function() {
 
+      // when javascript loads
+
       // when submit button clicked
       $("#submit").on("click", function(event) {
 
@@ -31,64 +33,49 @@
           var addTime = $("#input-time").val().trim();
           var addFreq = $("#input-freq").val().trim();
 
-          // if any inputs are empty, do not submit
-          if (addName === "" ||
-              addDest === "" ||
-              addTime === "" ||
-              addFreq === "") {}
+          $("#submit").prop("disabled", false);
 
-          // if all inputs are entered, enable submit
-          else {
+          // push inputs to firebase database
+          database.ref("/trains").push({
 
-              $("#submit").prop("disabled", false);
+              name: addName,
+              destination: addDest,
+              time: addTime,
+              frequency: addFreq
 
-              // push inputs to firebase database
-              database.ref("/trains").push({
+          });
 
-                  name: addName,
-                  destination: addDest,
-                  time: addTime,
-                  frequency: addFreq
-
-              });
-
-              // clear input fields after submission
-              $("#input-name").val("");
-              $("#input-dest").val("");
-              $("#input-time").val("");
-              $("#input-freq").val("")
-
-          }
+          // clear input fields after submission
+          $("#input-name").val("");
+          $("#input-dest").val("");
+          $("#input-time").val("");
+          $("#input-freq").val("")
 
           // show trains and key in console log
           database.ref("trains").on("child_added", function(train) {
 
-              console.log(train.val());
+              // log train info
+              console.log(train.val().name);
+              console.log(train.val().destination);
+              console.log(train.val().time);
+              console.log(train.val().frequency);
 
-              console.log(train.getKey());
+              // display all firebase items to tbody
+              $("#trains").append("<tr><td>" + train.val().name +
+                  "</td><td>" + train.val().destination + "</td><td>" +
+                  train.val().time + "</td><td>" + train.val().frequency +
+                  "</td></tr>");
 
-              var tableRow = $("<tr>");
 
-              var tableData = $("<td>");
+              dataRef.ref().orderByChild("dateAdded").limitToLast(1).on("child_added",
+                  function(snapshot) {
 
-              var dataName = $(train.name);
-              var dataDest = $(train.dest);
-              var dataTime = $(train.time);
-              var dataFreq = $(train.freq);
+                      $("#trains").append("<tr><td>" + train.val().name +
+                          "</td><td>" + train.val().destination + "</td><td>" +
+                          train.val().time + "</td><td>" + train.val().frequency +
+                          "</td></tr>");
 
-              dataName.text("<td>" + train.val().name + "</td>");
-              dataDest.html(train.val().dest);
-              dataTime.html(train.val().time);
-              dataFreq.html(train.val().freq);
-
-              // tableRow.append(tableData);
-
-              // append to table body
-              tableRow.append(dataName)
-
-              console.log();
-
-              $("#trains").append(tableRow)
+                  });
 
           });
 
